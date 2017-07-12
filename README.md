@@ -12,14 +12,23 @@
 
 * We only actually need a `NOP`, `POP {RDI, RSI, RDX, RCX, R8, R9}`, and a `JMP [SOMETHING]` (I've used `RAX` for parity with syscalls) for syscalls and PLT calls
 
+## Files
+- `memfdcreate.sh` - The actual payload
+- `overwrite.sh`   - The entrypoint (`bash overwrite.sh ./busybox-x86_64`)
+- `payload.sh`     - Wrapper around `memfdcreate.sh` to create the botnet
+- `readsyms.sh`    - ELF Parser
+- `utils.sh`       - Utility functions, including ROP generator
+
+
 ## Features:
-    - We can call any PLT (e.g glibc) function or syscall, with arbitrary arguments, including string arguments
-    - Pure Bash ROPChain generator, including ELF parser to ensure grepped gadgets are within the `r-x` `.text` section
+- We can call any PLT (e.g glibc) function or syscall, with arbitrary arguments, including string arguments
+
+- Pure Bash ROPChain generator, including ELF parser to ensure grepped gadgets are within the `r-x` `.text` section
 
 ## Future work
-    - Cache gadget offsets from the ASLR base on the first run, so the second run is faster
-    - Interactivity with processes executed via the `fexecve` method. This can be achieved using FUSE's `passthrough` example, but this requires `libfuse` to be
-      available.
+- Cache gadget offsets from the ASLR base on the first run, so the second run is faster
+
+- Interactivity with processes executed via the `fexecve` method. This can be achieved using FUSE's `passthrough` example, but this requires `libfuse` to be available.
 
 ## Why this works:
 
