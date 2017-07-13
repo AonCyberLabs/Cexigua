@@ -89,10 +89,6 @@ findgadget() {
 	# eval splits up the LIBS as args
 	# if we don't find one, try to find something in /usr/lib/* and LD_PRELOAD
 
-	# unfortunately, this doesn't account for sections in the binary
-	# we need to, because right now i'm getting gadgets in .data which isn't exec'able
-	# we can easily get the offset/size of .text using getsect, but grep doesn't have an option for it
-
 	matches=()
 	match=()
 	eval grep -Fao --byte-offset "$1" ${LIBS[@]} | grep -o "^[^:]*:[^:]*" | while IFS=$'\n' read match; do
