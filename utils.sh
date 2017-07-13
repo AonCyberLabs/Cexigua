@@ -214,16 +214,16 @@ syscall() {
 # execute a libc call in the ROPChain, with all arguments setup appropriately
 pltcall() {
 	[[ -z ${LIBC} ]] && getlibc | read LIBC
-	ARGS=($@)
 	# if we're preparing, we don't want to search for a function which is SLOW
 	# we know libc functions will be present
 	if [[ "${PREPARE}" = "PREPARE" ]]; then
 		SYM=0
 	else
-		getsym ${LIBC} ${ARGS[0]}
+		getsym ${LIBC} ${1}
 		SYM=$(relocatelibc ${symaddr})
 	fi
-	fnargs ${SYM} ${ARGS[@]:1}
+	shift
+	fnargs ${SYM} ${@}
 
 	findgadget "$(printf "\xff\xe0")"                   # jmp rax
 	SYSCALL=${SYSCALL}${gadgetaddr}
