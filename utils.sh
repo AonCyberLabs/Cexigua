@@ -77,7 +77,13 @@ getlibc() {
 	done
 }
 
+declare -A gadgetcache
 findgadget() {
+	if [[ ${gadgetcache[${1}]+FOUND} ]]; then
+		# cache hit
+		gadgetaddr=${gadgetcache[${1}]}
+	else
+	# cache miss
 	getlibs | read -a LIBS
 
 	# eval splits up the LIBS as args
@@ -123,6 +129,8 @@ findgadget() {
 
 	findregion ${match[0]}
 	gadgetaddr=$(hexlify $(($((16#${BASE}))+${match[1]})))
+	gadgetcache[${1}]=${gadgetaddr}
+	fi #cache miss
 }
 
 relocatelibc() {
