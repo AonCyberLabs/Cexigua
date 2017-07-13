@@ -95,8 +95,7 @@ findgadget() {
 
 	matches=()
 	match=()
-	eval grep -Fao --byte-offset "$1" ${LIBS[@]} | grep -o "^[^:]*:[^:]*" | IFS=$'\n' read -a matches
-	for match in ${matches[@]}; do
+	eval grep -Fao --byte-offset "$1" ${LIBS[@]} | grep -o "^[^:]*:[^:]*" | while IFS=$'\n' read match; do
 		IFS=: match=(${match})
 		getsect "${match[0]}" ".text" ${PROGBITS} | IFS=' ' read textaddr textsize
 
@@ -110,7 +109,7 @@ findgadget() {
 	if [[ -z "${match[0]}" || -z "${match[1]}" ]]; then
 		matches=()
 		match=()
-		eval grep -Fao --byte-offset "$1" /usr/lib/* 2>/dev/null | grep -o "^[^:]*:[^:]*" | while read match; do
+		eval grep -Fao --byte-offset "$1" /usr/lib/* 2>/dev/null | grep -o "^[^:]*:[^:]*" | while IFS=$'\n' read match; do
 			IFS=: match=(${match})
 			getsect "${match[0]}" ".text" ${PROGBITS} | IFS=' ' read textaddr textsize
 
