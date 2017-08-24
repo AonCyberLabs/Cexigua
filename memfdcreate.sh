@@ -1,3 +1,5 @@
+# Copyright (c) 2017 Rory McNamara
+
 # each syscall will subtract it's length from the SLEDLEN, so we know how many NOPs to write
 SLEDLEN=$((${PAYLOADSIZE}/8))
 SYSCALLS=()

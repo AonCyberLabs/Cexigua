@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (c) 2017 Rory McNamara
+
 STARTTIME=$(date +%s)
 SLEEPLEN=30
 echo "Preparing for exploitation, finding LD_PRELOAD if necessary" >&2

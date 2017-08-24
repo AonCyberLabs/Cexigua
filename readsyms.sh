@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (c) 2017 Rory McNamara
+
 shopt -s lastpipe # used for setting env vars in pipes to limit use of subshells
 # https://en.wikipedia.org/wiki/Executable_and_Linkable_Format#File_header
 

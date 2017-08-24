@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (c) 2017 Rory McNamara
+
 source utils.sh
 source readsyms.sh
 

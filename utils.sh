@@ -1,3 +1,5 @@
+# Copyright (c) 2017 Rory McNamara
+
 declare -A hex
 for ((j=1; j < 256; j++)); do
 	# we can't set \0 or \x0a in an array, so skip those, and we can check for them later. all other bytes are ok
