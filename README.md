@@ -10,7 +10,7 @@
    would `mmap` a `PROT_EXEC` section, copy a standard shellcode file into memory and execute that, which itself mounted a FUSE filesystem. This method was
    more flexible but also seemingly more brittle, and had large amounts of handwritten ASM.
 
-* We only actually need a `NOP`, `POP {RDI, RSI, RDX, RCX, R8, R9}`, and a `JMP [SOMETHING]` (I've used `RAX` for parity with syscalls) for syscalls and PLT calls
+* We only actually need a `NOP`, `POP {RDI, RSI, RDX, RCX, R8, R9}`, `SYSCALL` and a `JMP [SOMETHING]` (I've used `RAX` for parity with syscalls) for syscalls and PLT calls
 
 ## Files
 - `memfdcreate.sh` - The actual payload
