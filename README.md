@@ -15,7 +15,7 @@
 ## Files
 - `memfdcreate.sh` - The actual payload
 - `overwrite.sh`   - The entrypoint (`bash overwrite.sh ./busybox-x86_64`)
-- `payload.sh`     - Wrapper around `memfdcreate.sh` to create the botnet
+- `payload.sh`     - Wrapper around `memfdcreate.sh` to create the payload
 - `readsyms.sh`    - ELF Parser
 - `utils.sh`       - Utility functions, including ROP generator
 
